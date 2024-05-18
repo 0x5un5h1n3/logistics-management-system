@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
+    <persistence-unit name="WebPU" transaction-type="JTA">
+        <jta-data-source>jdbc/logistics_db</jta-data-source>
+        <class>com.logistics.ejb.entity.Cargo</class>
+        <class>com.logistics.ejb.entity.Shipment</class>
+        <class>com.logistics.ejb.entity.Vehicle</class>
+        <class>com.logistics.ejb.entity.User</class>
+        <properties>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+        </properties>
+    </persistence-unit>
+</persistence>
