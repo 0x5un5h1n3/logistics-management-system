@@ -5,11 +5,10 @@ import com.logistics.ejb.service.ShipmentService;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Stateless;
-import jakarta.ejb.TransactionAttribute;
-import jakarta.ejb.TransactionAttributeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -29,7 +28,20 @@ public class RouteOptimizationTimer {
     }
 
     private void optimizeRouteForShipment(Shipment shipment) {
-        // Implement logic to optimize the route for the shipment
         logger.info("Optimizing route for shipment from {} to {}", shipment.getOrigin(), shipment.getDestination());
+
+        String optimizedRoute = calculateOptimizedRoute(shipment.getOrigin(), shipment.getDestination());
+
+        // Update the shipment with the optimized route
+        shipment.setOptimizedRoute(optimizedRoute);
+        try {
+            shipmentService.updateShipment(shipment);
+        } catch (ShipmentException e) {
+            logger.error("Error updating shipment with optimized route", e);
+        }
+    }
+
+    private String calculateOptimizedRoute(String origin, String destination) {
+        return origin + " -> " + destination;
     }
 }

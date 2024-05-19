@@ -27,21 +27,47 @@ public class User {
     @Column(nullable = false)
     private byte[] salt;
 
-    // Constructors, getters, and setters
+    // Constructors
+
+    public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        setPassword(password);
+    }
+
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
 
     public void setPassword(String password) {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
         this.salt = salt;
-
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt);
-            byte[] hashedPassword = md.digest(password.getBytes());
-            this.passwordHash = Base64.getEncoder().encodeToString(hashedPassword);
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("Error during password hashing", e);
-        }
+        this.passwordHash = PasswordUtils.hashPassword(password, salt);
     }
 }

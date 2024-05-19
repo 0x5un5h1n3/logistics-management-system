@@ -40,6 +40,78 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>TrackShipmentServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.TrackShipmentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrackShipmentServlet</servlet-name>
+        <url-pattern>/trackShipment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ManageShipmentServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.ManageShipmentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageShipmentServlet</servlet-name>
+        <url-pattern>/manageShipment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ManageCargoServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.ManageCargoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageCargoServlet</servlet-name>
+        <url-pattern>/manageCargo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ManageVehiclesServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.ManageVehiclesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageVehiclesServlet</servlet-name>
+        <url-pattern>/manageVehicles</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditShipmentServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.EditShipmentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditShipmentServlet</servlet-name>
+        <url-pattern>/editShipment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditCargoServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.EditCargoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditCargoServlet</servlet-name>
+        <url-pattern>/editCargo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EditVehicleServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.EditVehicleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditVehicleServlet</servlet-name>
+        <url-pattern>/editVehicle</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CancelShipmentServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.CancelShipmentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CancelShipmentServlet</servlet-name>
+        <url-pattern>/cancelShipment</url-pattern>
+    </servlet-mapping>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Secured</web-resource-name>

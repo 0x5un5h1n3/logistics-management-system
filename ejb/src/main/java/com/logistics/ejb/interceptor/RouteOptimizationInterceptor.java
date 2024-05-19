@@ -13,7 +13,7 @@ public class RouteOptimizationInterceptor {
     public Object optimizeRoute(InvocationContext ic) throws Exception {
         if (ic.getMethod().getName().equals("scheduleShipment")) {
             Shipment shipment = (Shipment) ic.getParameters()[0];
-            // Optimize the route for the shipment
+            
             logger.info("Optimizing route for shipment from {} to {}", shipment.getOrigin(), shipment.getDestination());
         }
         return ic.proceed();

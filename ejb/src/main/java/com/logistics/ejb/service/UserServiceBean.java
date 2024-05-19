@@ -2,6 +2,7 @@ package com.logistics.ejb.service;
 
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.remote.UserServiceRemote;
+import com.logistics.util.PasswordUtils;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
@@ -11,48 +12,42 @@ import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+import java.util.List;
 
 @Stateless
+@Remote(UserServiceRemote.class)
 public class UserServiceBean implements UserServiceRemote {
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceBean.class);
 
     @PersistenceContext
     private EntityManager em;
 
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public User authenticate(String username, String password) {
+    @Override
+    public boolean authenticateUser(String username, String password) {
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
         query.setParameter("username", username);
-        User user = query.getSingleResult();
+        List<User> users = query.getResultList();
 
-        if (user != null && verifyPassword(password, user.getPasswordHash(), user.getSalt())) {
-            return user;
+        if (!users.isEmpty()) {
+            User user = users.get(0);
+            String hashedPassword = user.getPasswordHash();
+            String saltedHashedPassword = PasswordUtils.hashPassword(password, user.getSalt());
+            return hashedPassword.equals(saltedHashedPassword);
         }
 
-        return null;
-    }
-
-    private boolean verifyPassword(String password, String passwordHash, byte[] salt) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(salt);
-            byte[] hashedPassword = md.digest(password.getBytes());
-            String base64Hash = Base64.getEncoder().encodeToString(hashedPassword);
-            return base64Hash.equals(passwordHash);
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("Error during password verification", e);
-            return false;
-        }
+        return false;
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void registerUser(User user) {
+    @Override
+    public void registerUser(String username, String password) {
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
-        query.setParameter("username", user.getUsername());
+        query.setParameter("username", username);
+
         if (query.getResultList().isEmpty()) {
+            String hashedPassword = PasswordUtils.hashPassword(password, new byte[16]);
+            User user = new User(username, hashedPassword);
             em.persist(user);
         } else {
             throw new IllegalArgumentException("Username already exists");

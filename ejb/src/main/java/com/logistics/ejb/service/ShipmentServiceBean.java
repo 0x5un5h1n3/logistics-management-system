@@ -52,6 +52,8 @@ public class ShipmentServiceBean implements ShipmentService {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void cancelShipment(Long id) {
         Shipment shipment = em.find(Shipment.class, id);
-        em.remove(shipment);
+        if (shipment != null) {
+            em.remove(shipment);
+        }
     }
 }

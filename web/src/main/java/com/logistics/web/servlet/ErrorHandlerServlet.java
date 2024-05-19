@@ -47,5 +47,4 @@ public class ErrorHandlerServlet extends HttpServlet {
         out.write("</body></html>");
     }
 
-    // Other servlet methods
 }

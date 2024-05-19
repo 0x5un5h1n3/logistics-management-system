@@ -1,6 +1,7 @@
 package com.logistics.ejb.entity;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -9,20 +10,25 @@ public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String origin;
     private String destination;
     private Date shippingDate;
 
-    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = true)
+    private String optimizedRoute;
+
+    @OneToMany(mappedBy = "shipment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Cargo> cargos;
 
     public Shipment() {
     }
 
-    public Shipment(String origin, String destination, Date shippingDate) {
+    public Shipment(String origin, String destination, Date shippingDate, String optimizedRoute) {
         this.origin = origin;
         this.destination = destination;
         this.shippingDate = shippingDate;
+        this.optimizedRoute = optimizedRoute;
     }
 
     public Long getId() {
@@ -55,5 +61,13 @@ public class Shipment {
 
     public void setShippingDate(Date shippingDate) {
         this.shippingDate = shippingDate;
+    }
+
+    public String getOptimizedRoute() {
+        return optimizedRoute;
+    }
+
+    public void setOptimizedRoute(String optimizedRoute) {
+        this.optimizedRoute = optimizedRoute;
     }
 }

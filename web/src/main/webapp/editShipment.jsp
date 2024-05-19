@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@ taglib
+prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <title>Edit Shipment</title>
@@ -18,7 +19,11 @@
     </header>
     <main>
       <div class="container">
-        <form id="editShipmentForm">
+        <form
+          id="editShipmentForm"
+          action="${pageContext.request.contextPath}/editShipment"
+          method="post"
+        >
           <input
             type="hidden"
             id="shipmentId"
@@ -53,6 +58,16 @@
               name="shippingDate"
               value="${shipment.shippingDate}"
               required
+            />
+          </div>
+          <div class="form-group">
+            <label for="optimizedRoute">Optimized Route:</label>
+            <input
+              type="text"
+              id="optimizedRoute"
+              name="optimizedRoute"
+              value="${shipment.optimizedRoute}"
+              readonly
             />
           </div>
           <button type="submit" class="btn">Update Shipment</button>

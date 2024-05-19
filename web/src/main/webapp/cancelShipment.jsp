@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@ taglib
-prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <title>Cancel Shipment</title>
@@ -14,7 +14,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <p>Origin: ${shipment.origin}</p>
         <p>Destination: ${shipment.destination}</p>
         <p>Shipping Date: ${shipment.shippingDate}</p>
-        <form action="cancelShipment" method="post">
+        <form action="<c:url value="/cancelShipment"/>" method="post">
           <input type="hidden" name="id" value="${shipment.id}" />
           <button type="submit">Cancel</button>
           <a href="manageShipment.jsp">Back</a>

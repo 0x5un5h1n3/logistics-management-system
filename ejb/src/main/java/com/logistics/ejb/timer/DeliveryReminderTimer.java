@@ -35,8 +35,9 @@ public class DeliveryReminderTimer {
     }
 
     private void sendReminderForShipment(Shipment shipment) {
+    
         try {
-            // Implement logic to send delivery reminder for the shipment
+            System.out.println("Sending delivery reminder for shipment: " + shipment.getId());
             logger.info("Sending delivery reminder for shipment from {} to {} on {}",
                     shipment.getOrigin(), shipment.getDestination(), shipment.getShippingDate());
         } catch (Exception e) {
