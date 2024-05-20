@@ -1,10 +1,12 @@
 package com.logistics.web.servlet;
 
+import com.logistics.ejb.entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,20 @@ public class ErrorHandlerServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(ErrorHandlerServlet.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            User user = (User) session.getAttribute("user");
+            if (user.isAuthenticated()) {
+                handleErrorRequest(request, response);
+            } else {
+                response.sendRedirect("login.jsp");
+            }
+        } else {
+            response.sendRedirect("login.jsp");
+        }
+    }
+
+    private void handleErrorRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Throwable throwable = (Throwable) request.getAttribute("jakarta.servlet.error.exception");
         Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
         String servletName = (String) request.getAttribute("jakarta.servlet.error.servlet_name");
@@ -46,5 +62,4 @@ public class ErrorHandlerServlet extends HttpServlet {
         }
         out.write("</body></html>");
     }
-
 }

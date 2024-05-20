@@ -1,7 +1,7 @@
 package com.logistics.ejb.service;
 
 import com.logistics.ejb.entity.User;
-import com.logistics.ejb.remote.UserServiceRemote;
+import com.logistics.ejb.remote.UserService;
 import com.logistics.util.PasswordUtils;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @Stateless
-@Remote(UserServiceRemote.class)
-public class UserServiceBean implements UserServiceRemote {
+@Remote(UserService.class)
+public class UserServiceBean implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceBean.class);
 
     @PersistenceContext
@@ -52,5 +52,25 @@ public class UserServiceBean implements UserServiceRemote {
         } else {
             throw new IllegalArgumentException("Username already exists");
         }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @Override
+    public boolean isAuthenticated(User user) {
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.id = :userId", User.class);
+        query.setParameter("userId", user.getId());
+        List<User> users = query.getResultList();
+
+        return !users.isEmpty();
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @Override
+    public User getUserByUsername(String username) {
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+        query.setParameter("username", username);
+        List<User> users = query.getResultList();
+
+        return users.isEmpty() ? null : users.get(0);
     }
 }

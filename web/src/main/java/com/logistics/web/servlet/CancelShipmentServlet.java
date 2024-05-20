@@ -17,8 +17,18 @@ public class CancelShipmentServlet extends HttpServlet {
     private ShipmentService shipmentService;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long shipmentId = Long.parseLong(request.getParameter("shipmentId"));
-        shipmentService.cancelShipment(shipmentId);
-        response.sendRedirect("manageShipment.jsp");
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            User user = (User) session.getAttribute("user");
+            if (user.isAuthenticated()) {
+                Long shipmentId = Long.parseLong(request.getParameter("shipmentId"));
+                shipmentService.cancelShipment(shipmentId);
+                response.sendRedirect("manageShipment.jsp");
+            } else {
+                response.sendRedirect("login.jsp");
+            }
+        } else {
+            response.sendRedirect("login.jsp");
+        }
     }
 }

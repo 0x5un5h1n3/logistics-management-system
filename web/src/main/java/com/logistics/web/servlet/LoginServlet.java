@@ -25,9 +25,15 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        User user = userService.authenticate(username, password);
-        if (user != null) {
+        // Validate user input
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input");
+            return;
+        }
+
+        if (userService.authenticateUser(username, password)) {
             HttpSession session = request.getSession();
+            User user = userService.getUserByUsername(username);
             session.setAttribute("user", user);
             response.sendRedirect("index.jsp");
         } else {

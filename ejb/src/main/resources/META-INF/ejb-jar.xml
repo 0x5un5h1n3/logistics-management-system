@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ejb-jar>
-<!--    <assembly-descriptor>-->
-<!--        <interceptor-binding>-->
-<!--            <ejb-name>*</ejb-name>-->
-<!--            <interceptor-class>com.logistics.ejb.interceptor.AuthInterceptor</interceptor-class>-->
-<!--        </interceptor-binding>-->
-<!--    </assembly-descriptor>-->
+    <assembly-descriptor>
+        <interceptor-binding>
+            <ejb-name>*</ejb-name>
+            <interceptor-class>com.logistics.ejb.interceptor.LoggingInterceptor</interceptor-class>
+            <interceptor-class>com.logistics.ejb.interceptor.RouteOptimizationInterceptor</interceptor-class>
+            <interceptor-class>com.logistics.ejb.interceptor.AuthInterceptor</interceptor-class>
+        </interceptor-binding>
+    </assembly-descriptor>
 </ejb-jar>

@@ -77,6 +77,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>CreateShipmentServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.CreateShipmentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateShipmentServlet</servlet-name>
+        <url-pattern>/createShipment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>EditShipmentServlet</servlet-name>
         <servlet-class>com.logistics.web.servlet.EditShipmentServlet</servlet-class>
     </servlet>

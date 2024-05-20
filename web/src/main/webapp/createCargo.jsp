@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %> <%@ taglib
+prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
   <head>
     <title>Create Cargo</title>
@@ -10,31 +11,43 @@
         <h1>Create Cargo</h1>
         <nav>
           <ul>
-            <li><a href="index.jsp">Home</a></li>
-            <li><a href="manageCargo.jsp">Manage Cargo</a></li>
+            <c:if test="${sessionScope.user != null}">
+              <li><a href="index.jsp">Home</a></li>
+              <li><a href="manageCargo.jsp">Manage Cargo</a></li>
+              <li><a href="logout">Logout</a></li>
+            </c:if>
+            <c:if test="${sessionScope.user == null}">
+              <li><a href="login.jsp">Login</a></li>
+              <li><a href="register.jsp">Register</a></li>
+            </c:if>
           </ul>
         </nav>
       </div>
     </header>
     <main>
       <div class="container">
-        <form id="cargoForm">
-          <div class="form-group">
-            <label for="description">Description:</label>
-            <input type="text" id="description" name="description" required />
-          </div>
-          <div class="form-group">
-            <label for="weight">Weight:</label>
-            <input
-              type="number"
-              id="weight"
-              name="weight"
-              step="0.01"
-              required
-            />
-          </div>
-          <button type="submit" class="btn">Create Cargo</button>
-        </form>
+        <c:if test="${sessionScope.user != null}">
+          <form id="cargoForm">
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <input type="text" id="description" name="description" required />
+            </div>
+            <div class="form-group">
+              <label for="weight">Weight:</label>
+              <input
+                type="number"
+                id="weight"
+                name="weight"
+                step="0.01"
+                required
+              />
+            </div>
+            <button type="submit" class="btn">Create Cargo</button>
+          </form>
+        </c:if>
+        <c:if test="${sessionScope.user == null}">
+          <p>Please login or register to access this page.</p>
+        </c:if>
       </div>
     </main>
     <footer>
