@@ -1,7 +1,7 @@
 package com.logistics.ejb.test;
 
 import com.logistics.ejb.entity.Vehicle;
-import com.logistics.ejb.service.VehicleServiceBean;
+import com.logistics.ejb.service.VehicleService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -9,20 +9,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class VehicleServiceBeanTest {
     private EntityManagerFactory emf;
     private EntityManager em;
-    private VehicleServiceBean vehicleService;
+    private VehicleService vehicleService;
 
     @BeforeEach
     void setUp() {
         emf = Persistence.createEntityManagerFactory("WebPU");
         em = emf.createEntityManager();
-        vehicleService = new VehicleServiceBean();
+        vehicleService = new VehicleService();
         vehicleService.em = em;
     }
 

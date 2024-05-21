@@ -1,6 +1,6 @@
 package com.logistics.web.servlet;
 
-import com.logistics.ejb.service.ShipmentService;
+import com.logistics.ejb.remote.ShipmentServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +14,7 @@ import java.io.IOException;
 public class CancelShipmentServlet extends HttpServlet {
 
     @EJB
-    private ShipmentService shipmentService;
+    private ShipmentServiceRemote shipmentServiceRemote;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -22,7 +22,7 @@ public class CancelShipmentServlet extends HttpServlet {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
                 Long shipmentId = Long.parseLong(request.getParameter("shipmentId"));
-                shipmentService.cancelShipment(shipmentId);
+                shipmentServiceRemote.cancelShipment(shipmentId);
                 response.sendRedirect("manageShipment.jsp");
             } else {
                 response.sendRedirect("login.jsp");

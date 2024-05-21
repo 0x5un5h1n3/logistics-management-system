@@ -2,7 +2,7 @@ package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.Shipment;
 import com.logistics.ejb.entity.User;
-import com.logistics.ejb.service.ShipmentService;
+import com.logistics.ejb.remote.ShipmentServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class EditShipmentServlet extends HttpServlet {
 
     @EJB
-    private ShipmentService shipmentService;
+    private ShipmentServiceRemote shipmentServiceRemote;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -26,7 +26,7 @@ public class EditShipmentServlet extends HttpServlet {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
                 Long shipmentId = Long.parseLong(request.getParameter("id"));
-                Shipment shipment = shipmentService.getShipmentById(shipmentId);
+                Shipment shipment = shipmentServiceRemote.getShipmentById(shipmentId);
 
                 if (shipment == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Shipment not found");
@@ -53,12 +53,12 @@ public class EditShipmentServlet extends HttpServlet {
                 String destination = request.getParameter("destination");
                 LocalDate shippingDate = LocalDate.parse(request.getParameter("shippingDate"));
 
-                Shipment shipment = shipmentService.getShipmentById(shipmentId);
+                Shipment shipment = shipmentServiceRemote.getShipmentById(shipmentId);
                 shipment.setOrigin(origin);
                 shipment.setDestination(destination);
                 shipment.setShippingDate(shippingDate);
 
-                shipmentService.updateShipment(shipment);
+                shipmentServiceRemote.updateShipment(shipment);
                 response.sendRedirect("manageShipment.jsp");
             } else {
                 response.sendRedirect("login.jsp");

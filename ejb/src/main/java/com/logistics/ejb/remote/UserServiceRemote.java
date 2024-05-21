@@ -5,6 +5,8 @@ import jakarta.ejb.Remote;
 
 @Remote
 public interface UserServiceRemote {
-    User authenticate(String username, String password);
-    void registerUser(User user);
+    boolean authenticateUser(String username, String password);
+    void registerUser(String username, String password);
+    boolean isAuthenticated(User user);
+    User getUserByUsername(String username);
 }

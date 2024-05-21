@@ -2,7 +2,7 @@ package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.Shipment;
 import com.logistics.ejb.entity.User;
-import com.logistics.ejb.service.ShipmentService;
+import com.logistics.ejb.remote.ShipmentServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +17,7 @@ import java.io.IOException;
 public class TrackShipmentServlet extends HttpServlet {
 
     @EJB
-    private ShipmentService shipmentService;
+    private ShipmentServiceRemote shipmentServiceRemote;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -25,7 +25,7 @@ public class TrackShipmentServlet extends HttpServlet {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
                 String trackingNumber = request.getParameter("trackingNumber");
-                Shipment shipment = shipmentService.getShipmentByTrackingNumber(trackingNumber);
+                Shipment shipment = shipmentServiceRemote.getShipmentByTrackingNumber(trackingNumber);
 
                 if (shipment == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Shipment not found");

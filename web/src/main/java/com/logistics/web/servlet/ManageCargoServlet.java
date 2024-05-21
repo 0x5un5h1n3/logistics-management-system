@@ -2,7 +2,7 @@ package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.Cargo;
 import com.logistics.ejb.entity.User;
-import com.logistics.ejb.service.CargoService;
+import com.logistics.ejb.remote.CargoServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,14 +18,14 @@ import java.util.List;
 public class ManageCargoServlet extends HttpServlet {
 
     @EJB
-    private CargoService cargoService;
+    private CargoServiceRemote cargoServiceRemote;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
-                List<Cargo> cargos = cargoService.getAllCargo();
+                List<Cargo> cargos = cargoServiceRemote.getAllCargo();
                 request.setAttribute("cargos", cargos);
                 request.getRequestDispatcher("/manageCargo.jsp").forward(request, response);
             } else {

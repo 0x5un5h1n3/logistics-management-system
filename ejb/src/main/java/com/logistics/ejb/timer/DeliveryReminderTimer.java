@@ -1,7 +1,7 @@
 package com.logistics.ejb.timer;
 
 import com.logistics.ejb.entity.Shipment;
-import com.logistics.ejb.service.ShipmentService;
+import com.logistics.ejb.remote.ShipmentServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Stateless;
@@ -18,14 +18,14 @@ public class DeliveryReminderTimer {
     private static final Logger logger = LoggerFactory.getLogger(DeliveryReminderTimer.class);
 
     @EJB
-    private ShipmentService shipmentService;
+    private ShipmentServiceRemote shipmentServiceRemote;
 
     @Schedule(hour = "*", minute = "*/15", second = "0", persistent = false)
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void sendDeliveryReminders() {
         try {
             Date currentDate = new Date();
-            List<Shipment> upcomingShipments = shipmentService.getUpcomingShipments(currentDate);
+            List<Shipment> upcomingShipments = shipmentServiceRemote.getUpcomingShipments(currentDate);
             for (Shipment shipment : upcomingShipments) {
                 sendReminderForShipment(shipment);
             }

@@ -2,7 +2,7 @@ package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.entity.Vehicle;
-import com.logistics.ejb.service.VehicleService;
+import com.logistics.ejb.remote.VehicleServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,14 +18,14 @@ import java.util.List;
 public class ManageVehiclesServlet extends HttpServlet {
 
     @EJB
-    private VehicleService vehicleService;
+    private VehicleServiceRemote vehicleServiceRemote;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
-                List<Vehicle> vehicles = vehicleService.getAllVehicles();
+                List<Vehicle> vehicles = vehicleServiceRemote.getAllVehicles();
                 request.setAttribute("vehicles", vehicles);
                 request.getRequestDispatcher("/manageVehicles.jsp").forward(request, response);
             } else {

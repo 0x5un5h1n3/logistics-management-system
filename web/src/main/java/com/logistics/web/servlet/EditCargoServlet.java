@@ -2,7 +2,7 @@ package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.Cargo;
 import com.logistics.ejb.entity.User;
-import com.logistics.ejb.service.CargoService;
+import com.logistics.ejb.remote.CargoServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +17,7 @@ import java.io.IOException;
 public class EditCargoServlet extends HttpServlet {
 
     @EJB
-    private CargoService cargoService;
+    private CargoServiceRemote cargoServiceRemote;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -25,7 +25,7 @@ public class EditCargoServlet extends HttpServlet {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
                 Long cargoId = Long.parseLong(request.getParameter("id"));
-                Cargo cargo = cargoService.getCargoById(cargoId);
+                Cargo cargo = cargoServiceRemote.getCargoById(cargoId);
 
                 if (cargo == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Cargo not found");
@@ -58,10 +58,10 @@ public class EditCargoServlet extends HttpServlet {
                     return;
                 }
 
-                Cargo cargo = cargoService.getCargoById(cargoId);
+                Cargo cargo = cargoServiceRemote.getCargoById(cargoId);
                 cargo.setDescription(description);
                 cargo.setWeight(weight);
-                cargoService.updateCargo(cargo);
+                cargoServiceRemote.updateCargo(cargo);
                 response.sendRedirect("manageCargo.jsp");
             } else {
                 response.sendRedirect("login.jsp");

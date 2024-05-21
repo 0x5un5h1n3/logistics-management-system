@@ -2,12 +2,7 @@ package com.logistics.ejb.entity;
 
 import jakarta.persistence.*;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Base64;
-
-import static com.logistics.ejb.service.UserServiceBean.logger;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {

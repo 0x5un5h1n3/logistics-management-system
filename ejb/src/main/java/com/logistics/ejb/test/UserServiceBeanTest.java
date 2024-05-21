@@ -1,7 +1,7 @@
 package com.logistics.ejb.test;
 
 import com.logistics.ejb.entity.User;
-import com.logistics.ejb.service.UserServiceBean;
+import com.logistics.ejb.service.UserService;
 import com.logistics.util.PasswordUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceBeanTest {
     private EntityManagerFactory emf;
     private EntityManager em;
-    private UserServiceBean userService;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
         emf = Persistence.createEntityManagerFactory("WebPU");
         em = emf.createEntityManager();
-        userService = new UserServiceBean();
+        userService = new UserService();
         userService.em = em;
     }
 

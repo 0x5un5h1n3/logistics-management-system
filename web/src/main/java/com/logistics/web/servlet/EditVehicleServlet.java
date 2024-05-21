@@ -2,7 +2,7 @@ package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.entity.Vehicle;
-import com.logistics.ejb.service.VehicleService;
+import com.logistics.ejb.remote.VehicleServiceRemote;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +17,7 @@ import java.io.IOException;
 public class EditVehicleServlet extends HttpServlet {
 
     @EJB
-    private VehicleService vehicleService;
+    private VehicleServiceRemote vehicleServiceRemote;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -25,7 +25,7 @@ public class EditVehicleServlet extends HttpServlet {
             User user = (User) session.getAttribute("user");
             if (user.isAuthenticated()) {
                 Long vehicleId = Long.parseLong(request.getParameter("id"));
-                Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
+                Vehicle vehicle = vehicleServiceRemote.getVehicleById(vehicleId);
 
                 if (vehicle == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Vehicle not found");
@@ -52,12 +52,12 @@ public class EditVehicleServlet extends HttpServlet {
                 String licensePlate = request.getParameter("licensePlate");
                 double capacity = Double.parseDouble(request.getParameter("capacity"));
 
-                Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
+                Vehicle vehicle = vehicleServiceRemote.getVehicleById(vehicleId);
                 vehicle.setType(type);
                 vehicle.setLicensePlate(licensePlate);
                 vehicle.setCapacity(capacity);
 
-                vehicleService.updateVehicle(vehicle);
+                vehicleServiceRemote.updateVehicle(vehicle);
                 response.sendRedirect("manageVehicles.jsp");
             } else {
                 response.sendRedirect("login.jsp");

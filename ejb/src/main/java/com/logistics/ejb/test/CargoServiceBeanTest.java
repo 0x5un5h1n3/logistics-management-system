@@ -2,7 +2,7 @@ package com.logistics.ejb.test;
 
 import com.logistics.ejb.entity.Cargo;
 import com.logistics.ejb.exception.CargoException;
-import com.logistics.ejb.service.CargoServiceBean;
+import com.logistics.ejb.service.CargoService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class CargoServiceBeanTest {
     private EntityManagerFactory emf;
     private EntityManager em;
-    private CargoServiceBean cargoService;
+    private CargoService cargoService;
 
     @BeforeEach
     void setUp() {
         emf = Persistence.createEntityManagerFactory("WebPU");
         em = emf.createEntityManager();
-        cargoService = new CargoServiceBean();
+        cargoService = new CargoService();
         cargoService.em = em;
     }
 
