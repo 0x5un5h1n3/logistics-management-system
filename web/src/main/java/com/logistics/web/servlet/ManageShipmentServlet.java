@@ -3,6 +3,7 @@ package com.logistics.web.servlet;
 import com.logistics.ejb.entity.Shipment;
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.remote.ShipmentServiceRemote;
+import com.logistics.ejb.service.UserService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,11 +21,14 @@ public class ManageShipmentServlet extends HttpServlet {
     @EJB
     private ShipmentServiceRemote shipmentServiceRemote;
 
+    @EJB
+    private UserService userService;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            if (user.isAuthenticated()) {
+            if (userService.isAuthenticated(user)) {
                 List<Shipment> shipments = shipmentServiceRemote.getAllShipments();
                 request.setAttribute("shipments", shipments);
                 request.getRequestDispatcher("/manageShipment.jsp").forward(request, response);

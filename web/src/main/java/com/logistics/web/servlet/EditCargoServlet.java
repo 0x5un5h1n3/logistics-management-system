@@ -3,6 +3,7 @@ package com.logistics.web.servlet;
 import com.logistics.ejb.entity.Cargo;
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.remote.CargoServiceRemote;
+import com.logistics.ejb.service.UserService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,11 +20,14 @@ public class EditCargoServlet extends HttpServlet {
     @EJB
     private CargoServiceRemote cargoServiceRemote;
 
+    @EJB
+    private UserService userService;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            if (user.isAuthenticated()) {
+            if (userService.isAuthenticated(user)) {
                 Long cargoId = Long.parseLong(request.getParameter("id"));
                 Cargo cargo = cargoServiceRemote.getCargoById(cargoId);
 
@@ -46,7 +50,7 @@ public class EditCargoServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            if (user.isAuthenticated()) {
+            if (userService.isAuthenticated(user)) {
                 Long cargoId = Long.parseLong(request.getParameter("cargoId"));
                 String description = request.getParameter("description");
                 double weight = Double.parseDouble(request.getParameter("weight"));

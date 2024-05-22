@@ -1,6 +1,7 @@
 package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.User;
+import com.logistics.ejb.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,11 +18,14 @@ import java.io.PrintWriter;
 public class ErrorHandlerServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(ErrorHandlerServlet.class);
 
+    @EJB
+    private UserService userService;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
-            if (user.isAuthenticated()) {
+            if (userService.isAuthenticated(user)) {
                 handleErrorRequest(request, response);
             } else {
                 response.sendRedirect("login.jsp");

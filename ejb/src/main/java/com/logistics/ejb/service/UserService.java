@@ -2,7 +2,6 @@ package com.logistics.ejb.service;
 
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.remote.UserServiceRemote;
-import com.logistics.util.PasswordUtils;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
@@ -12,12 +11,16 @@ import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Stateless
-@Remote(UserServiceRemote.class)
+@Remote(UserService.class)
 public class UserService implements UserServiceRemote {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{4,20}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
 
     @PersistenceContext
     private EntityManager em;
@@ -42,12 +45,21 @@ public class UserService implements UserServiceRemote {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @Override
     public void registerUser(String username, String password) {
+        if (!isValidUsername(username)) {
+            throw new IllegalArgumentException("Invalid username format");
+        }
+
+        if (!isValidPassword(password)) {
+            throw new IllegalArgumentException("Invalid password format");
+        }
+
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
         query.setParameter("username", username);
 
         if (query.getResultList().isEmpty()) {
-            String hashedPassword = PasswordUtils.hashPassword(password, new byte[16]);
-            User user = new User(username, hashedPassword);
+            byte[] salt = generateSalt();
+            String hashedPassword = PasswordUtils.hashPassword(password, salt);
+            User user = new User(username, hashedPassword, salt);
             em.persist(user);
         } else {
             throw new IllegalArgumentException("Username already exists");
@@ -72,5 +84,20 @@ public class UserService implements UserServiceRemote {
         List<User> users = query.getResultList();
 
         return users.isEmpty() ? null : users.get(0);
+    }
+
+    private boolean isValidUsername(String username) {
+        return USERNAME_PATTERN.matcher(username).matches();
+    }
+
+    private boolean isValidPassword(String password) {
+        return PASSWORD_PATTERN.matcher(password).matches();
+    }
+
+    private byte[] generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        return salt;
     }
 }
