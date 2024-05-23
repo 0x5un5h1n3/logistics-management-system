@@ -54,6 +54,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
               </c:forEach>
             </tbody>
           </table>
+          <a href="createShipment.jsp" class="btn">Create New Shipment</a>
         </c:if>
         <c:if test="${sessionScope.user == null}">
           <p>Please login or register to access this page.</p>
