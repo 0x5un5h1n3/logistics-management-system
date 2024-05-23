@@ -2,13 +2,10 @@ package com.logistics.ejb.entity;
 
 import jakarta.persistence.*;
 
-import java.security.SecureRandom;
-
 @Entity
-@Table(name = "users", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"username"})
-})
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = {"username"}) })
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,18 +19,16 @@ public class User {
     @Column(nullable = false)
     private byte[] salt;
 
-    // Constructors
-
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(String username, String passwordHash, byte[] salt) {
         this.username = username;
-        setPassword(password);
+        this.passwordHash = passwordHash;
+        this.salt = salt;
     }
 
     // Getters and Setters
-
     public Long getId() {
         return id;
     }
@@ -54,15 +49,15 @@ public class User {
         return passwordHash;
     }
 
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
     public byte[] getSalt() {
         return salt;
     }
 
-    public void setPassword(String password) {
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
+    public void setSalt(byte[] salt) {
         this.salt = salt;
-        this.passwordHash = PasswordUtils.hashPassword(password, salt);
     }
 }
