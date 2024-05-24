@@ -13,7 +13,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
           <ul>
             <c:if test="${sessionScope.user != null}">
               <li><a href="index.jsp">Home</a></li>
-              <li><a href="manageCargo.jsp">Manage Cargo</a></li>
+              <li><a href="manageShipment.jsp">Manage Shipments</a></li>
               <li><a href="logout">Logout</a></li>
             </c:if>
             <c:if test="${sessionScope.user == null}">
@@ -27,7 +27,17 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <main>
       <div class="container">
         <c:if test="${sessionScope.user != null}">
-          <form id="cargoForm">
+          <h2>Shipment Details</h2>
+          <div class="shipment-details">
+            <p>ID: ${shipment.id}</p>
+            <p>Origin: ${shipment.origin}</p>
+            <p>Destination: ${shipment.destination}</p>
+            <p>Shipping Date: ${shipment.shippingDate}</p>
+          </div>
+
+          <h2>Create Cargo</h2>
+          <form action="createCargo" method="post">
+            <input type="hidden" name="shipmentId" value="${shipment.id}" />
             <div class="form-group">
               <label for="description">Description:</label>
               <input type="text" id="description" name="description" required />
@@ -44,6 +54,9 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
             </div>
             <button type="submit" class="btn">Create Cargo</button>
           </form>
+          <c:if test="${not empty error}">
+            <p class="error">${error}</p>
+          </c:if>
         </c:if>
         <c:if test="${sessionScope.user == null}">
           <p>Please login or register to access this page.</p>

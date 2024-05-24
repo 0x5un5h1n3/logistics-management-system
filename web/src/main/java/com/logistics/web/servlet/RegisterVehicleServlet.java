@@ -14,8 +14,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/editVehicle")
-public class EditVehicleServlet extends HttpServlet {
+@WebServlet("/registerVehicle")
+public class CreateVehicleServlet extends HttpServlet {
 
     @EJB
     private VehicleServiceRemote vehicleServiceRemote;
@@ -28,14 +28,7 @@ public class EditVehicleServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             if (userService.isAuthenticated(user)) {
-                Long vehicleId = Long.parseLong(request.getParameter("id"));
-                Vehicle vehicle = vehicleServiceRemote.getVehicleById(vehicleId);
-                if (vehicle == null) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Vehicle not found");
-                    return;
-                }
-                request.setAttribute("vehicle", vehicle);
-                request.getRequestDispatcher("/editVehicle.jsp").forward(request, response);
+                request.getRequestDispatcher("/registerVehicle.jsp").forward(request, response);
             } else {
                 response.sendRedirect("login.jsp");
             }
@@ -49,16 +42,12 @@ public class EditVehicleServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             if (userService.isAuthenticated(user)) {
-                Long vehicleId = Long.parseLong(request.getParameter("vehicleId"));
                 String type = request.getParameter("type");
                 String licensePlate = request.getParameter("licensePlate");
                 double capacity = Double.parseDouble(request.getParameter("capacity"));
 
-                Vehicle vehicle = vehicleServiceRemote.getVehicleById(vehicleId);
-                vehicle.setType(type);
-                vehicle.setLicensePlate(licensePlate);
-                vehicle.setCapacity(capacity);
-                vehicleServiceRemote.updateVehicle(vehicle);
+                Vehicle vehicle = new Vehicle(type, licensePlate, capacity);
+                vehicleServiceRemote.registerVehicle(vehicle);
 
                 response.sendRedirect("manageVehicles.jsp");
             } else {

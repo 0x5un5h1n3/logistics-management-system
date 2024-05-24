@@ -13,7 +13,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
           <ul>
             <c:if test="${sessionScope.user != null}">
               <li><a href="index.jsp">Home</a></li>
-              <li><a href="createCargo.jsp">Create New Cargo</a></li>
+              <li><a href="manageShipment.jsp">Manage Shipments</a></li>
               <li><a href="logout">Logout</a></li>
             </c:if>
             <c:if test="${sessionScope.user == null}">
@@ -27,6 +27,15 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <main>
       <div class="container">
         <c:if test="${sessionScope.user != null}">
+          <h2>Shipment Details</h2>
+          <div class="shipment-details">
+            <p>ID: ${shipment.id}</p>
+            <p>Origin: ${shipment.origin}</p>
+            <p>Destination: ${shipment.destination}</p>
+            <p>Shipping Date: ${shipment.shippingDate}</p>
+          </div>
+
+          <h2>Cargo List</h2>
           <table>
             <thead>
               <tr>
@@ -50,7 +59,10 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
               </c:forEach>
             </tbody>
           </table>
-          <a href="createCargo.jsp" class="btn">Create New Cargo</a>
+
+          <a href="createCargo?shipmentId=${shipment.id}" class="btn"
+            >Add Cargo</a
+          >
         </c:if>
         <c:if test="${sessionScope.user == null}">
           <p>Please login or register to access this page.</p>

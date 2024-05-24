@@ -34,7 +34,11 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
             <p>License Plate: ${vehicle.licensePlate}</p>
             <p>Capacity: ${vehicle.capacity}</p>
           </div>
-          <form id="deregisterVehicleForm">
+          <form
+            id="deregisterVehicleForm"
+            action="deregisterVehicle"
+            method="post"
+          >
             <input
               type="hidden"
               id="vehicleId"

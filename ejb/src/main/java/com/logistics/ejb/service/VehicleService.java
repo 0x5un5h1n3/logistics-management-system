@@ -7,11 +7,13 @@ import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 
 @Stateless
 @Remote(VehicleServiceRemote.class)
 public class VehicleService implements VehicleServiceRemote {
+
     @PersistenceContext
     private EntityManager em;
 
@@ -38,6 +40,8 @@ public class VehicleService implements VehicleServiceRemote {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void deregisterVehicle(Long id) {
         Vehicle vehicle = em.find(Vehicle.class, id);
-        em.remove(vehicle);
+        if (vehicle != null) {
+            em.remove(vehicle);
+        }
     }
 }

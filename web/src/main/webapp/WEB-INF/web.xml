@@ -94,6 +94,17 @@
         <url-pattern>/editShipment</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>CreateCargoServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.CreateCargoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateCargoServlet</servlet-name>
+        <url-pattern>/createCargo</url-pattern>
+    </servlet-mapping>
+
+
     <servlet>
         <servlet-name>EditCargoServlet</servlet-name>
         <servlet-class>com.logistics.web.servlet.EditCargoServlet</servlet-class>
@@ -103,6 +114,25 @@
         <url-pattern>/editCargo</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>DeleteCargoServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.DeleteCargoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteCargoServlet</servlet-name>
+        <url-pattern>/deleteCargo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RegisterVehicleServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.RegisterVehicleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegisterVehicleServlet</servlet-name>
+        <url-pattern>/registerVehicle</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>EditVehicleServlet</servlet-name>
         <servlet-class>com.logistics.web.servlet.EditVehicleServlet</servlet-class>
@@ -110,6 +140,16 @@
     <servlet-mapping>
         <servlet-name>EditVehicleServlet</servlet-name>
         <url-pattern>/editVehicle</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>DeregisterVehicleServlet</servlet-name>
+        <servlet-class>com.logistics.web.servlet.DeregisterVehicleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeregisterVehicleServlet</servlet-name>
+        <url-pattern>/deregisterVehicle</url-pattern>
     </servlet-mapping>
 
     <servlet>

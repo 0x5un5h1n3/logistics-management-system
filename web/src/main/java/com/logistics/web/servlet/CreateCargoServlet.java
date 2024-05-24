@@ -1,9 +1,11 @@
 package com.logistics.web.servlet;
 
 import com.logistics.ejb.entity.Cargo;
+import com.logistics.ejb.entity.Shipment;
 import com.logistics.ejb.entity.User;
 import com.logistics.ejb.exception.CargoException;
 import com.logistics.ejb.remote.CargoServiceRemote;
+import com.logistics.ejb.remote.ShipmentServiceRemote;
 import com.logistics.ejb.service.UserService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -15,11 +17,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/editCargo")
-public class EditCargoServlet extends HttpServlet {
+@WebServlet("/createCargo")
+public class CreateCargoServlet extends HttpServlet {
 
     @EJB
     private CargoServiceRemote cargoServiceRemote;
+
+    @EJB
+    private ShipmentServiceRemote shipmentServiceRemote;
 
     @EJB
     private UserService userService;
@@ -29,14 +34,14 @@ public class EditCargoServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             if (userService.isAuthenticated(user)) {
-                Long cargoId = Long.parseLong(request.getParameter("id"));
-                Cargo cargo = cargoServiceRemote.getCargoById(cargoId);
-                if (cargo == null) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Cargo not found");
+                Long shipmentId = Long.parseLong(request.getParameter("shipmentId"));
+                Shipment shipment = shipmentServiceRemote.getShipmentById(shipmentId);
+                if (shipment == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Shipment not found");
                     return;
                 }
-                request.setAttribute("cargo", cargo);
-                request.getRequestDispatcher("/editCargo.jsp").forward(request, response);
+                request.setAttribute("shipment", shipment);
+                request.getRequestDispatcher("/createCargo.jsp").forward(request, response);
             } else {
                 response.sendRedirect("login.jsp");
             }
@@ -50,21 +55,21 @@ public class EditCargoServlet extends HttpServlet {
         if (session != null && session.getAttribute("user") != null) {
             User user = (User) session.getAttribute("user");
             if (userService.isAuthenticated(user)) {
-                Long cargoId = Long.parseLong(request.getParameter("cargoId"));
                 String description = request.getParameter("description");
                 double weight = Double.parseDouble(request.getParameter("weight"));
-
-                Cargo cargo = cargoServiceRemote.getCargoById(cargoId);
-                cargo.setDescription(description);
-                cargo.setWeight(weight);
-
+                Long shipmentId = Long.parseLong(request.getParameter("shipmentId"));
+                Shipment shipment = shipmentServiceRemote.getShipmentById(shipmentId);
+                if (shipment == null) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Shipment not found");
+                    return;
+                }
+                Cargo cargo = new Cargo(description, weight);
                 try {
-                    cargoServiceRemote.updateCargo(cargo);
-                    response.sendRedirect("manageCargo?shipmentId=" + cargo.getShipment().getId());
+                    cargoServiceRemote.createCargo(cargo, shipment);
+                    response.sendRedirect("manageCargo?shipmentId=" + shipmentId);
                 } catch (CargoException e) {
                     request.setAttribute("error", e.getMessage());
-                    request.setAttribute("cargo", cargo);
-                    request.getRequestDispatcher("/editCargo.jsp").forward(request, response);
+                    request.getRequestDispatcher("/createCargo.jsp").forward(request, response);
                 }
             } else {
                 response.sendRedirect("login.jsp");

@@ -48,6 +48,7 @@ prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
                   <td>${shipment.optimizedRoute}</td>
                   <td>
                     <a href="<c:url value="/editShipment?id=${shipment.id}"/>">Edit</a>
+                    <a href="<c:url value="/manageCargo?shipmentId=${shipment.id}"/>">Manage Cargo</a>
                     <a href="<c:url value="/cancelShipment?id=${shipment.id}"/>">Cancel</a>
                   </td>
                 </tr>
