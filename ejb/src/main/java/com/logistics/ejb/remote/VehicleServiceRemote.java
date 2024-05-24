@@ -13,4 +13,3 @@ public interface VehicleServiceRemote {
     void updateVehicle(Vehicle vehicle);
     void deregisterVehicle(Long id);
 }
-
