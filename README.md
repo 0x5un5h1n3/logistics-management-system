@@ -1,5 +1,7 @@
 ## Logistics Management System
 
+![product-screenshot]
+
 A comprehensive Java EE application for managing logistics operations, including shipments, cargos, and vehicles. This system provides functionalities for creating, updating, and tracking shipments, associating cargos with shipments, registering and managing vehicles, and optimizing routes for efficient transportation.
 
 ### Key Features
@@ -51,3 +53,5 @@ A comprehensive Java EE application for managing logistics operations, including
 - Build and Deploy: After setting up the prerequisites, you need to build the project using Maven and deploy the generated EAR file to the application server. The deployment process may vary depending on the application server you are using.
 
 This logistics management system is designed to streamline and optimize logistics operations, providing a centralized platform for managing shipments, cargos, and vehicles efficiently.
+
+[product-screenshot]: images/screenshot.png
